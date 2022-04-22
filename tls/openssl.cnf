@@ -1,0 +1,37 @@
+[ ca ]
+
+default_ca = CA_default
+
+[ CA_extensions ]
+
+basicConstraints = CA:TRUE
+
+[ CA_default ]
+
+certificate = /tmp/artifacts/ca.crt
+copy_extensions = copy
+database = /tmp/artifacts/index.txt
+default_days = 3650
+default_md = sha256
+new_certs_dir = /tmp/artifacts/certs
+policy = CA_policy
+private_key = /tmp/artifacts/ca.key
+serial = /tmp/artifacts/serial
+
+[ CA_policy ]
+
+xx
+
+[ req ]
+
+default_bits = 4096
+req_extensions = default_extensions
+utf8 = yes
+x509_extensions = default_extensions
+
+[ default_extensions ]
+
+basicConstraints = CA:FALSE
+extendedKeyUsage = clientAuth,serverAuth
+keyUsage = dataEncipherment,keyEncipherment
+subjectAltName = IP:127.0.0.1
