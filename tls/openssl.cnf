@@ -11,7 +11,7 @@ basicConstraints = CA:TRUE
 certificate = /tmp/artifacts/ca.crt
 copy_extensions = copy
 database = /tmp/artifacts/index.txt
-default_days = 3650
+default_days = 30
 default_md = sha256
 new_certs_dir = /tmp/artifacts/certs
 policy = CA_policy
@@ -23,7 +23,6 @@ x509_extensions = CA_extensions
 
 countryName = match
 organizationName = match
-organizationalUnitName = match
 commonName = supplied
 
 [ req ]
@@ -42,10 +41,7 @@ countryName_min = 2
 countryName_max = 2
 
 organizationName = Organization Name (eg, company)
-organizationName_default = Red Hat
-
-organizationalUnitName = Organizational Unit Name (eg, section)
-organizationalUnitName_default = Global Professional Services
+organizationName_default = Example
 
 commonName = Common Name (eg, server FQDN or YOUR name)
 
