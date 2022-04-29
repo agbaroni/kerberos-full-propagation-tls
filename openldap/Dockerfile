@@ -6,11 +6,12 @@ RUN apk add openldap openldap-back-mdb openldap-overlay-accesslog openldap-overl
  && mkdir -p /etc/openldap/slapd.d \
  && mkdir -p /var/run/openldap/data
 
+COPY ca.crt /etc/openldap/
 COPY openldap.crt /etc/openldap/
 COPY openldap.key /etc/openldap/
 
 RUN /usr/sbin/slapadd -F /etc/openldap/slapd.d -n 0 -l /tmp/server.ldif
 
-EXPOSE 389
+EXPOSE 636
 
-ENTRYPOINT [ "/usr/sbin/slapd", "-F", "/etc/openldap/slapd.d", "-h", "ldap:///", "-d", "32", "-d", "64", "-d", "128" ]
+ENTRYPOINT [ "/usr/sbin/slapd", "-F", "/etc/openldap/slapd.d", "-h", "ldaps:///", "-d", "-1" ]

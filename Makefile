@@ -1,17 +1,20 @@
 BUILDAH=buildah
 PODMAN=podman
 IC_PREFIX=kfp-
-MV=mv
+CP=cp
 
 .PHONY: all certificates clean images
 
 all: clean certificates images
+	$(PODMAN) run --name $(IC_PREFIX)openldap --rm --publish '10636:636' --detach --interactive --tty $(IC_PREFIX)openldap
 
 certificates:
+	echo -n > tls/artifacts/index.txt
 	$(BUILDAH) build -t $(IC_PREFIX)tls tls
 	$(PODMAN) run --name $(IC_PREFIX)tls --rm --volume $(PWD)/tls/artifacts:/tmp/artifacts $(IC_PREFIX)tls
-	$(MV) tls/artifacts/openldap.crt openldap/
-	$(MV) tls/artifacts/openldap.key openldap/
+	$(CP) tls/artifacts/ca.crt openldap/
+	$(CP) tls/artifacts/openldap.crt openldap/
+	$(CP) tls/artifacts/openldap.key openldap/
 	$(BUILDAH) rmi $(IC_PREFIX)tls
 
 clean:
@@ -25,7 +28,6 @@ clean:
 	-$(PODMAN) rm -f $(IC_PREFIX)openldap
 	-$(BUILDAH) rmi $(IC_PREFIX)openldap
 	-$(BUILDAH) rmi $(shell $(BUILDAH) images -f dangling=true -q)
-	-echo -n > tls/artifacts/index.txt
 
 images:
 	$(BUILDAH) build -t $(IC_PREFIX)openldap openldap

@@ -3,6 +3,10 @@ objectClass: olcGlobal
 cn: config
 olcIdleTimeout: 10
 olcLogLevel: any
+olcTLSCACertificateFile: /etc/openldap/ca.crt
+olcTLSCertificateFile: /etc/openldap/openldap.crt
+olcTLSCertificateKeyFile: /etc/openldap/openldap.key
+olcTLSVerifyClient: try
 
 dn: cn=module{0},cn=config
 objectClass: olcModuleList
