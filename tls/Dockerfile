@@ -1,10 +1,10 @@
 FROM alpine
 
-COPY openssl.cnf /etc/ssl/
-COPY run.sh /opt/
+COPY openssl.cnf /tmp/
+COPY run.sh /tmp/
 
 RUN apk add bash openssl3
 
 VOLUME /tmp/artifacts
 
-ENTRYPOINT [ "/bin/bash", "/opt/run.sh" ]
+ENTRYPOINT [ "/bin/bash", "/tmp/run.sh" ]

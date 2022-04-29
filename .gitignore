@@ -1,0 +1,4 @@
+tls/artifacts/*.crt
+tls/artifacts/*.key
+tls/artifacts/certs/*.csr
+tls/artifacts/certs/*.crt

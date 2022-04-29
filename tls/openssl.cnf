@@ -17,19 +17,39 @@ new_certs_dir = /tmp/artifacts/certs
 policy = CA_policy
 private_key = /tmp/artifacts/ca.key
 serial = /tmp/artifacts/serial
+x509_extensions = CA_extensions
 
 [ CA_policy ]
 
-xx
+countryName = match
+organizationName = match
+organizationalUnitName = match
+commonName = supplied
 
 [ req ]
 
 default_bits = 4096
-req_extensions = default_extensions
+distinguished_name = req_distinguished_name
+req_extensions = req_extensions
 utf8 = yes
-x509_extensions = default_extensions
+x509_extensions = CA_extensions
 
-[ default_extensions ]
+[ req_distinguished_name ]
+
+countryName = Country Name (2 letter code)
+countryName_default = IT
+countryName_min = 2
+countryName_max = 2
+
+organizationName = Organization Name (eg, company)
+organizationName_default = Red Hat
+
+organizationalUnitName = Organizational Unit Name (eg, section)
+organizationalUnitName_default = Global Professional Services
+
+commonName = Common Name (eg, server FQDN or YOUR name)
+
+[ req_extensions ]
 
 basicConstraints = CA:FALSE
 extendedKeyUsage = clientAuth,serverAuth
