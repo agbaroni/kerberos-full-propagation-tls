@@ -1,0 +1,60 @@
+dn: cn=config
+objectClass: olcGlobal
+cn: config
+olcIdleTimeout: 10
+olcLogLevel: any
+
+dn: cn=module{0},cn=config
+objectClass: olcModuleList
+cn: module{0}
+olcModulePath: /usr/lib/openldap
+olcModuleLoad: accesslog.so
+olcModuleLoad: auditlog.so
+olcModuleLoad: back_mdb.so
+olcModuleLoad: ppolicy.so
+olcModuleLoad: refint.so
+
+dn: cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: schema
+
+include: file:///etc/openldap/schema/core.ldif
+include: file:///etc/openldap/schema/cosine.ldif
+include: file:///etc/openldap/schema/inetorgperson.ldif
+include: file:///etc/openldap/schema/misc.ldif
+include: file:///etc/openldap/schema/nis.ldif
+include: file:///etc/openldap/schema/namedobject.ldif
+include: file:///etc/openldap/schema/msuser.ldif
+
+dn: olcDatabase=frontend,cn=config
+objectClass: olcDatabaseConfig
+olcDatabase: frontend
+olcAccess: to * by * read
+
+# olcRootPW => Config123!
+dn: olcDatabase=config,cn=config
+objectClass: olcDatabaseConfig
+olcDatabase: config
+olcRootPW: {SSHA}+p8HwUfbJL6wBQNhHvi2ahuzB2yZduRj
+olcAccess: to * by * none
+
+# olcRootPW => Admin123!
+dn: olcDatabase=mdb,cn=config
+objectClass: olcDatabaseConfig
+objectClass: olcMdbConfig
+olcDatabase: mdb
+olcAccess: to attrs=userPassword
+  by self write
+  by dn="cn=Administrator,dc=example,dc=com" write
+  by anonymous auth
+  by * none
+olcAccess: to *
+  by self write
+  by dn="cn=Administrator,dc=example,dc=com" write
+  by anonymous auth
+  by * read
+olcRootDN: cn=Administrator,dc=example,dc=com
+olcRootPW: {SSHA}e+YhGAfrPQ24tPEVqn/TXvFTr0aqATql
+olcSuffix: dc=example,dc=com
+olcTimeLimit: 10
+olcDbDirectory: /var/run/openldap/data
