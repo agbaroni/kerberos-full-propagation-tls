@@ -2,5 +2,5 @@ tls/artifacts/*.csr
 tls/artifacts/*.crt
 tls/artifacts/*.key
 tls/artifacts/certs/*.pem
-tls/artifacts/index.txt*
+tls/artifacts/index.txt.*
 tls/artifacts/serial*
