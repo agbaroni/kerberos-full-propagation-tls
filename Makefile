@@ -10,7 +10,9 @@ all: clean certificates
 	$(BUILDAH) build -t $(IC_PREFIX)openldap openldap
 	$(PODMAN) run --name $(IC_PREFIX)openldap --rm --publish '10636:636' --detach --interactive --tty $(IC_PREFIX)openldap
 	$(BUILDAH) build --add-host=mymachine:$(MY_IP) -t $(IC_PREFIX)kdc kdc
-	$(PODMAN) run --name $(IC_PREFIX)kdc --rm --add-host=mymachine:$(MY_IP) --publish '10088:88' --publish '10749:749' --publish '10750:750' --detach --interactive --tty $(IC_PREFIX)kdc
+	$(PODMAN) run --name $(IC_PREFIX)kdc --rm --add-host=mymachine:$(MY_IP) --publish '10088:88' --publish '10749:749' --publish '10750:750' --detach --interactive --tty --volume $(PWD)/kdc/keytabs:/tmp/keytabs $(IC_PREFIX)kdc
+	$(BUILDAH) build --add-host=mymachine:$(MY_IP) -t $(IC_PREFIX)postgresql postgresql
+	$(PODMAN) run --name $(IC_PREFIX)postgresql --rm --add-host=mymachine:$(MY_IP) --publish '15432:5432' --detach --interactive --tty $(IC_PREFIX)postgresql
 
 certificates:
 	echo -n > tls/artifacts/index.txt
@@ -19,6 +21,8 @@ certificates:
 	$(CP) tls/artifacts/ca.crt openldap/
 	$(CP) tls/artifacts/openldap.crt openldap/
 	$(CP) tls/artifacts/openldap.key openldap/
+	$(CP) tls/artifacts/postgresql.crt postgresql/
+	$(CP) tls/artifacts/postgresql.key postgresql/
 	$(BUILDAH) rmi $(IC_PREFIX)tls
 
 clean:

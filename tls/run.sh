@@ -9,3 +9,6 @@ openssl3 ca -config /tmp/openssl.cnf -in ca.csr -passin 'pass:password' -out ca.
 
 openssl3 req -passout 'pass:password' -out openldap.csr -new -keyout openldap.key -config /tmp/openssl.cnf -subj "/C=IT/O=Example/CN=kfp-openldap" -nodes
 openssl3 ca -config /tmp/openssl.cnf -in openldap.csr -passin 'pass:password' -out openldap.crt -batch
+
+openssl3 req -passout 'pass:password' -out postgresql.csr -new -keyout postgresql.key -config /tmp/openssl.cnf -subj "/C=IT/O=Example/CN=kfp-postgresql" -nodes
+openssl3 ca -config /tmp/openssl.cnf -in postgresql.csr -passin 'pass:password' -out postgresql.crt -batch
