@@ -29,6 +29,7 @@ include: file:///etc/openldap/schema/misc.ldif
 include: file:///etc/openldap/schema/nis.ldif
 include: file:///etc/openldap/schema/namedobject.ldif
 include: file:///etc/openldap/schema/msuser.ldif
+include: file:///tmp/kerberos.openldap.ldif
 
 dn: olcDatabase=frontend,cn=config
 objectClass: olcDatabaseConfig
@@ -52,6 +53,13 @@ olcAccess: to attrs=userPassword
   by dn="cn=Administrator,dc=example,dc=com" write
   by anonymous auth
   by * none
+olcAccess: to dn.subtree="ou=kerberos,dc=example,dc=com"
+  by self write
+  by dn="cn=Administrator,dc=example,dc=com" write
+  by dn="cn=kadmind,ou=kerberos,dc=example,dc=com" write
+  by dn="cn=kdc,ou=kerberos,dc=example,dc=com" write
+  by anonymous auth
+  by * read
 olcAccess: to *
   by self write
   by dn="cn=Administrator,dc=example,dc=com" write
