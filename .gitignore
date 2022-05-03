@@ -2,5 +2,6 @@
 *.csr
 *.key
 *.pem
+*.keytab
 tls/artifacts/index.txt*
 tls/artifacts/serial*

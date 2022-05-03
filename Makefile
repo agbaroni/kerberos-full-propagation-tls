@@ -5,7 +5,7 @@ CP=cp
 MY_IP=$(shell ip a | egrep -E 'inet ' | egrep -v '127\.0\.0' | cut -d ' ' -f 6 | cut -d '/' -f 1)
 
 .PHONY: all certificates clean images
-
+# $(CP) kdc/keytabs/postgres.keytab postgresql/
 all: clean certificates
 	$(BUILDAH) build -t $(IC_PREFIX)openldap openldap
 	$(PODMAN) run --name $(IC_PREFIX)openldap --rm --publish '10636:636' --detach --interactive --tty $(IC_PREFIX)openldap
@@ -33,8 +33,14 @@ clean:
 	-$(RM) tls/artifacts/serial
 	-$(RM) tls/artifacts/serial.*
 	-$(RM) tls/artifacts/certs/*.pem
+	-$(RM) kdc/keytabs/*.keytab
+	-$(RM) openldap/*.crt
+	-$(RM) openldap/*.key
+	-$(RM) postgresql/*.keytab
 	-$(PODMAN) rm -f $(IC_PREFIX)openldap
 	-$(BUILDAH) rmi $(IC_PREFIX)openldap
 	-$(PODMAN) rm -f $(IC_PREFIX)kdc
 	-$(BUILDAH) rmi $(IC_PREFIX)kdc
+	-$(PODMAN) rm -f $(IC_PREFIX)postgresql
+	-$(BUILDAH) rmi $(IC_PREFIX)postgresql
 	-$(BUILDAH) rmi $(shell $(BUILDAH) images -f dangling=true -q)

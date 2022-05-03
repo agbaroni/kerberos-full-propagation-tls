@@ -10,4 +10,4 @@ set -x
 /usr/sbin/kadmin.local add_principal -pw 'Admin123!' admin/admin@EXAMPLE.COM
 
 /usr/sbin/kadmin.local add_principal -pw 'Postgres123!' postgres/mymachine@EXAMPLE.COM
-/usr/sbin/kadmin.local ktadd -k /tmp/keytabs/postgres.keytab postgres/mymachine@EXAMPLE.COM
+
