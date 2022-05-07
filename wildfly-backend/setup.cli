@@ -4,9 +4,15 @@ embed-server --server-config=standalone-full.xml
 
 ########## Elytron ##########
 
-/subsystem=elytron/dir-context=backend-dir-context:add(url="ldaps://mymachine:10636",principal="cn=Administrator,dc=example,dc=com",credential-reference={clear-text=password})
+/subsystem=elytron/key-store=dir-key-store:add(type=JKS,path=/tmp/openldap.jks,credential-reference={clear-text=password})
 
-/subsystem=elytron/ldap-realm=backend-realm:add(dir-context=backend-dir-context,identity-mapping={search-base-dn="dc=example,dc=com",rdn-identifier=krbPrincipalName})
+/subsystem=elytron/trust-manager=dir-trust-manager:add(key-store=dir-key-store)
+
+/subsystem=elytron/client-ssl-context=dir-ssl-context:add(trust-manager=dir-trust-manager)
+
+/subsystem=elytron/dir-context=backend-dir-context:add(url="ldaps://mymachine:10636",principal="cn=Administrator,dc=example,dc=com",credential-reference={clear-text=password},ssl-context=dir-ssl-context)
+
+/subsystem=elytron/ldap-realm=backend-realm:add(dir-context=backend-dir-context,identity-mapping={search-base-dn="dc=example,dc=com",rdn-identifier=krbPrincipalName,use-recursive-search=true})
 
 # Fixed role
 /subsystem=elytron/constant-role-mapper=backend-role-mapper:add(roles=[Anyone])
@@ -39,3 +45,7 @@ module add --name=org.postgresql --absolute-resources=/tmp/postgresql-42.3.5.jar
 ########## EJB ##########
 
 /subsystem=ejb3/application-security-domain=backend:add(security-domain=backend-domain)
+
+########## Deploy ##########
+
+deploy /tmp/kfp-apps-backend-application-0.1.0-SNAPSHOT.ear

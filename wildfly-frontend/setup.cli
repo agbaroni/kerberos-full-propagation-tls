@@ -12,7 +12,7 @@ embed-server --server-config=standalone-full.xml
 
 /subsystem=elytron/dir-context=frontend-dir-context:add(url="ldaps://mymachine:10636",principal="cn=Administrator,dc=example,dc=com",credential-reference={clear-text=password},ssl-context=dir-ssl-context)
 
-/subsystem=elytron/ldap-realm=frontend-realm:add(dir-context=frontend-dir-context,identity-mapping={search-base-dn="dc=example,dc=com",rdn-identifier=krbPrincipalName})
+/subsystem=elytron/ldap-realm=frontend-realm:add(dir-context=frontend-dir-context,identity-mapping={search-base-dn="dc=example,dc=com",rdn-identifier=krbPrincipalName,use-recursive-search=true})
 
 # Fixed role
 /subsystem=elytron/constant-role-mapper=frontend-role-mapper:add(roles=[Anyone])
@@ -37,3 +37,7 @@ embed-server --server-config=standalone-full.xml
 ########## Undertow ##########
 
 /subsystem=undertow/application-security-domain=frontend:add(http-authentication-factory=frontend-authentication-factory)
+
+########## Deploy ##########
+
+deploy /tmp/kfp-apps-frontend-application-0.1.0-SNAPSHOT.ear
