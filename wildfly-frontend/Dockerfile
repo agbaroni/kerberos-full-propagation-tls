@@ -16,7 +16,9 @@ RUN apk add bash curl openjdk11-jre-headless openssl3 \
  && keytool -importkeystore -srckeystore /tmp/openldap.p12 -srcstoretype PKCS12 -destkeystore /tmp/openldap.jks -deststoretype JKS -srcstorepass password -deststorepass password \
  && /bin/bash /opt/wildfly-23.0.2.Final/bin/jboss-cli.sh --file=/opt/setup.cli \
  && adduser -D jboss \
- && chown -R jboss:jboss /opt/wildfly-23.0.2.Final
+ && chown -R jboss:jboss /opt/wildfly-23.0.2.Final \
+ && /bin/bash -c '/usr/bin/openssl3 s_client -showcerts -connect mymachine:18443 2>/dev/null < /dev/null | /bin/sed -n -e "/-.BEGIN/,/-.END/p" > /tmp/mymachine_remote.crt' \
+ && keytool -importcert -file /tmp/mymachine_remote.crt -keystore /tmp/mymachine_remote.jks -storepass password -noprompt
 
 EXPOSE 8443
 

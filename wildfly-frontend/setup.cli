@@ -5,10 +5,13 @@ embed-server --server-config=standalone-full.xml
 ########## Elytron ##########
 
 /subsystem=elytron/key-store=dir-key-store:add(type=JKS,path=/tmp/openldap.jks,credential-reference={clear-text=password})
+/subsystem=elytron/key-store=remote-key-store:add(type=JKS,path=/tmp/mymachine_remote.jks,credential-reference={clear-text=password})
 
 /subsystem=elytron/trust-manager=dir-trust-manager:add(key-store=dir-key-store)
+/subsystem=elytron/trust-manager=remote-trust-manager:add(key-store=remote-key-store)
 
 /subsystem=elytron/client-ssl-context=dir-ssl-context:add(trust-manager=dir-trust-manager)
+/subsystem=elytron/client-ssl-context=remote-ssl-context:add(trust-manager=remote-trust-manager)
 
 /subsystem=elytron/dir-context=frontend-dir-context:add(url="ldaps://mymachine:10636",principal="cn=Administrator,dc=example,dc=com",credential-reference={clear-text=password},ssl-context=dir-ssl-context)
 
@@ -27,6 +30,7 @@ embed-server --server-config=standalone-full.xml
 /subsystem=elytron/authentication-context=frontend-context:add(match-rules=[{authentication-configuration=frontend-configuration}])
 
 /subsystem=elytron:write-attribute(name=default-authentication-context,value=frontend-context)
+/subsystem=elytron:write-attribute(name=default-ssl-context,value=remote-ssl-context)
 
 ########## Remoting ##########
 
