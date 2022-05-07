@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+			     http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <artifactId>kfp-apps-backend-ejb</artifactId>
+  <dependencies>
+    <dependency>
+      <artifactId>jboss-ejb3-ext-api</artifactId>
+      <groupId>org.jboss.ejb3</groupId>
+      <scope>provided</scope>
+      <version>2.3.0.Final</version>
+    </dependency>
+    <dependency>
+      <artifactId>hibernate-core</artifactId>
+      <groupId>org.hibernate</groupId>
+      <scope>provided</scope>
+      <version>5.3.13.Final</version>
+    </dependency>
+    <dependency>
+      <artifactId>kfp-apps-backend-ejb-client</artifactId>
+      <groupId>io.github.agbaroni.tests</groupId>
+      <version>0.1.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+  <groupId>io.github.agbaroni.tests</groupId>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>kfp-apps-backend</artifactId>
+    <groupId>io.github.agbaroni.tests</groupId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+</project>
