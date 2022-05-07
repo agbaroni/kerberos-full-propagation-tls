@@ -1,7 +1,6 @@
 FROM alpine
 
 COPY krb5.conf /etc/
-COPY postgresql-42.3.5.jar /tmp/
 COPY wildfly-23.0.2.Final.tar.gz /tmp/
 
 WORKDIR /opt

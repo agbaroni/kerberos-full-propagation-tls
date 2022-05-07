@@ -17,12 +17,17 @@ all: clean certificates
 	$(PODMAN) run --name $(IC_PREFIX)postgresql --rm --add-host=mymachine:$(MY_IP) --publish '15432:5432' --detach --interactive --tty --volume $(PWD)/kdc/keytabs:/tmp/keytabs $(IC_PREFIX)postgresql
 	if [ ! -e wildfly-backend/wildfly-23.0.2.Final.tar.gz ]; then curl -JLk https://download.jboss.org/wildfly/23.0.2.Final/wildfly-23.0.2.Final.tar.gz > wildfly-backend/wildfly-23.0.2.Final.tar.gz ; fi
 	if [ ! -e wildfly-backend/postgresql-42.3.5.jar ]; then curl -JLk https://jdbc.postgresql.org/download/postgresql-42.3.5.jar > wildfly-backend/postgresql-42.3.5.jar ; fi
+	$(CP) kdc/krb5.conf wildfly-backend/
 	$(BUILDAH) build --add-host=mymachine:$(MY_IP) -t $(IC_PREFIX)wildfly-backend wildfly-backend
 	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE USER "ludwig@EXAMPLE.COM" WITH NOCREATEDB NOCREATEROLE NOSUPERUSER'
 	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE USER "wolfgang@EXAMPLE.COM" WITH NOCREATEDB NOCREATEROLE NOSUPERUSER'
 	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE DATABASE DB1 WITH OWNER "ludwig@EXAMPLE.COM"'
 	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE DATABASE DB2 WITH OWNER "wolfgang@EXAMPLE.COM"'
 	$(PODMAN) run --name $(IC_PREFIX)wildfly-backend --rm --add-host=mymachine:$(MY_IP) --publish '18443:8443' --detach --interactive --tty --volume $(PWD)/kdc/keytabs:/tmp/keytabs $(IC_PREFIX)wildfly-backend
+	$(CP) wildfly-backend/wildfly-23.0.2.Final.tar.gz wildfly-frontend/
+	$(CP) kdc/krb5.conf wildfly-frontend/
+	$(BUILDAH) build --add-host=mymachine:$(MY_IP) -t $(IC_PREFIX)wildfly-frontend wildfly-frontend
+	$(PODMAN) run --name $(IC_PREFIX)wildfly-frontend --rm --add-host=mymachine:$(MY_IP) --publish '28443:8443' --detach --interactive --tty --volume $(PWD)/kdc/keytabs:/tmp/keytabs $(IC_PREFIX)wildfly-frontend
 
 certificates:
 	echo -n > tls/artifacts/index.txt
@@ -58,8 +63,10 @@ clean:
 	-$(RM) postgresql/krb5.conf
 	-$(RM) wildfly-backend/*.crt
 	-$(RM) wildfly-backend/*.key
+	-$(RM) wildfly-backend/krb5.conf
 	-$(RM) wildfly-frontend/*.crt
 	-$(RM) wildfly-frontend/*.key
+	-$(RM) wildfly-frontend/krb5.conf
 	-$(PODMAN) rm -f $(IC_PREFIX)openldap
 	-$(BUILDAH) rmi $(IC_PREFIX)openldap
 	-$(PODMAN) rm -f $(IC_PREFIX)kdc
