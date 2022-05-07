@@ -82,4 +82,5 @@ clean:
 	-$(BUILDAH) rmi $(IC_PREFIX)wildfly-backend
 	-$(PODMAN) rm -f $(IC_PREFIX)wildfly-frontend
 	-$(BUILDAH) rmi $(IC_PREFIX)wildfly-frontend
+	-$(BUILDAH) rmi $(IC_PREFIX)apps
 	-$(BUILDAH) rmi $(shell $(BUILDAH) images -f dangling=true -q)
