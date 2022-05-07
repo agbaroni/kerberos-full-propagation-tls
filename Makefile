@@ -15,6 +15,12 @@ all: clean certificates
 	$(BUILDAH) build --add-host=mymachine:$(MY_IP) -t $(IC_PREFIX)postgresql postgresql
 	chmod 0644 kdc/keytabs/services.keytab
 	$(PODMAN) run --name $(IC_PREFIX)postgresql --rm --add-host=mymachine:$(MY_IP) --publish '15432:5432' --detach --interactive --tty --volume $(PWD)/kdc/keytabs:/tmp/keytabs $(IC_PREFIX)postgresql
+	$(BUILDAH) build --add-host=mymachine:$(MY_IP) -t $(IC_PREFIX)wildfly-backend wildfly-backend
+	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE USER "ludwig@EXAMPLE.COM" WITH NOCREATEDB NOCREATEROLE NOSUPERUSER'
+	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE USER "wolfgang@EXAMPLE.COM" WITH NOCREATEDB NOCREATEROLE NOSUPERUSER'
+	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE DATABASE DB1 WITH OWNER "ludwig@EXAMPLE.COM'
+	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE DATABASE DB2 WITH OWNER "wolfgang@EXAMPLE.COM'
+	$(PODMAN) run --name $(IC_PREFIX)wildfly-backend --rm --add-host=mymachine:$(MY_IP) --publish '15432:5432' --detach --interactive --tty --volume $(PWD)/kdc/keytabs:/tmp/keytabs $(IC_PREFIX)wildfly-backend
 
 certificates:
 	echo -n > tls/artifacts/index.txt
@@ -26,6 +32,12 @@ certificates:
 	$(CP) tls/artifacts/ca.crt postgresql/
 	$(CP) tls/artifacts/postgresql.crt postgresql/
 	$(CP) tls/artifacts/postgresql.key postgresql/
+	$(CP) tls/artifacts/ca.crt wildfly-backend/
+	$(CP) tls/artifacts/wildfly-backend.crt wildfly-backend/
+	$(CP) tls/artifacts/wildfly-backend.key wildfly-backend/
+	$(CP) tls/artifacts/ca.crt wildfly-frontend/
+	$(CP) tls/artifacts/wildfly-frontend.crt wildfly-frontend/
+	$(CP) tls/artifacts/wildfly-frontend.key wildfly-frontend/
 	$(BUILDAH) rmi $(IC_PREFIX)tls
 
 clean:
