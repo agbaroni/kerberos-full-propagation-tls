@@ -36,14 +36,14 @@ objectClass: olcDatabaseConfig
 olcDatabase: frontend
 olcAccess: to * by * read
 
-# olcRootPW => Config123!
+# olcRootPW => password
 dn: olcDatabase=config,cn=config
 objectClass: olcDatabaseConfig
 olcDatabase: config
-olcRootPW: {SSHA}+p8HwUfbJL6wBQNhHvi2ahuzB2yZduRj
+olcRootPW: {SSHA}wCvL8WmjkmQ9qKQxGn7zyJ2Qn/YzzB5p
 olcAccess: to * by * none
 
-# olcRootPW => Admin123!
+# olcRootPW => password
 dn: olcDatabase=mdb,cn=config
 objectClass: olcDatabaseConfig
 objectClass: olcMdbConfig
@@ -66,7 +66,7 @@ olcAccess: to *
   by anonymous auth
   by * read
 olcRootDN: cn=Administrator,dc=example,dc=com
-olcRootPW: {SSHA}e+YhGAfrPQ24tPEVqn/TXvFTr0aqATql
+olcRootPW: {SSHA}wCvL8WmjkmQ9qKQxGn7zyJ2Qn/YzzB5p
 olcSuffix: dc=example,dc=com
 olcTimeLimit: 10
 olcDbDirectory: /var/run/openldap/data

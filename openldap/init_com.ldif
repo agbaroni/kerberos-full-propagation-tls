@@ -8,16 +8,16 @@ dn: ou=kerberos,dc=example,dc=com
 objectClass: organizationalUnit
 ou: kerberos
 
-# userPassword => KAdminD123!
+# userPassword => password
 dn: cn=kadmind,ou=kerberos,dc=example,dc=com
 objectClass: applicationProcess
 objectClass: simpleSecurityObject
 cn: kadmind
-userPassword: {SSHA}xbOw8f+tIskqctlW1sC3hR/YMLtUpggl
+userPassword: {SSHA}wCvL8WmjkmQ9qKQxGn7zyJ2Qn/YzzB5p
 
-# userPassword => KDC123!
+# userPassword => password
 dn: cn=kdc,ou=kerberos,dc=example,dc=com
 objectClass: applicationProcess
 objectClass: simpleSecurityObject
 cn: kdc
-userPassword: {SSHA}J15GpyfjjCBVfw0xFHRC8V6gtby1Ec8M
+userPassword: {SSHA}wCvL8WmjkmQ9qKQxGn7zyJ2Qn/YzzB5p

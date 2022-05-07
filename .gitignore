@@ -5,3 +5,4 @@
 *.keytab
 tls/artifacts/index.txt*
 tls/artifacts/serial*
+postgresql/krb5.conf
