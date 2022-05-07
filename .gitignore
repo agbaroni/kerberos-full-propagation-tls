@@ -12,3 +12,4 @@ postgresql/krb5.conf
 wildfly-backend/krb5.conf
 wildfly-frontend/krb5.conf
 target
+cookies.txt

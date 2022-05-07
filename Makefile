@@ -16,8 +16,8 @@ all: clean certificates
 	chmod 0644 kdc/keytabs/services.keytab
 	$(PODMAN) run --name $(IC_PREFIX)postgresql --rm --add-host=mymachine:$(MY_IP) --publish '15432:5432' --detach --interactive --tty --volume $(PWD)/kdc/keytabs:/tmp/keytabs $(IC_PREFIX)postgresql
 	$(BUILDAH) build -t $(IC_PREFIX)apps apps
-	$(PODMAN) run --name kfp-apps --volume $(PWD)/apps/output:/tmp/output --rm --detach --interactive --tty kfp-apps cp /tmp/frontend/application/target/kfp-apps-frontend-application-0.1.0-SNAPSHOT.ear /tmp/output/
-	$(PODMAN) run --name kfp-apps --volume $(PWD)/apps/output:/tmp/output --rm --detach --interactive --tty kfp-apps cp /tmp/backend/application/target/kfp-apps-backend-application-0.1.0-SNAPSHOT.ear /tmp/output/
+	$(PODMAN) run --name kfp-apps-f --volume $(PWD)/apps/output:/tmp/output --rm --detach --interactive --tty kfp-apps cp /tmp/frontend/application/target/kfp-apps-frontend-application-0.1.0-SNAPSHOT.ear /tmp/output/
+	$(PODMAN) run --name kfp-apps-b --volume $(PWD)/apps/output:/tmp/output --rm --detach --interactive --tty kfp-apps cp /tmp/backend/application/target/kfp-apps-backend-application-0.1.0-SNAPSHOT.ear /tmp/output/
 	$(CP) apps/output/kfp-apps-backend-application-0.1.0-SNAPSHOT.ear wildfly-backend/
 	$(CP) apps/output/kfp-apps-frontend-application-0.1.0-SNAPSHOT.ear wildfly-frontend/
 	if [ ! -e wildfly-backend/wildfly-23.0.2.Final.tar.gz ]; then curl -JLk https://download.jboss.org/wildfly/23.0.2.Final/wildfly-23.0.2.Final.tar.gz > wildfly-backend/wildfly-23.0.2.Final.tar.gz ; fi
@@ -45,9 +45,13 @@ certificates:
 	$(CP) tls/artifacts/postgresql.crt postgresql/
 	$(CP) tls/artifacts/postgresql.key postgresql/
 	$(CP) tls/artifacts/ca.crt wildfly-backend/
+	$(CP) tls/artifacts/openldap.crt wildfly-backend/
+	$(CP) tls/artifacts/openldap.key wildfly-backend/
 	$(CP) tls/artifacts/wildfly-backend.crt wildfly-backend/
 	$(CP) tls/artifacts/wildfly-backend.key wildfly-backend/
 	$(CP) tls/artifacts/ca.crt wildfly-frontend/
+	$(CP) tls/artifacts/openldap.crt wildfly-frontend/
+	$(CP) tls/artifacts/openldap.key wildfly-frontend/
 	$(CP) tls/artifacts/wildfly-frontend.crt wildfly-frontend/
 	$(CP) tls/artifacts/wildfly-frontend.key wildfly-frontend/
 	$(BUILDAH) rmi $(IC_PREFIX)tls
@@ -82,5 +86,7 @@ clean:
 	-$(BUILDAH) rmi $(IC_PREFIX)wildfly-backend
 	-$(PODMAN) rm -f $(IC_PREFIX)wildfly-frontend
 	-$(BUILDAH) rmi $(IC_PREFIX)wildfly-frontend
+	-$(PODMAN) rm -f $(IC_PREFIX)apps-f
+	-$(PODMAN) rm -f $(IC_PREFIX)apps-b
 	-$(BUILDAH) rmi $(IC_PREFIX)apps
 	-$(BUILDAH) rmi $(shell $(BUILDAH) images -f dangling=true -q)
