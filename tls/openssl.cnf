@@ -50,4 +50,4 @@ commonName = Common Name (eg, server FQDN or YOUR name)
 basicConstraints = CA:FALSE
 extendedKeyUsage = clientAuth,serverAuth
 keyUsage = dataEncipherment,keyEncipherment
-subjectAltName = IP:127.0.0.1
+subjectAltName = IP:127.0.0.1,DNS:mymachine

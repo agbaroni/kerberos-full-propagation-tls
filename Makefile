@@ -15,12 +15,13 @@ all: clean certificates
 	$(BUILDAH) build --add-host=mymachine:$(MY_IP) -t $(IC_PREFIX)postgresql postgresql
 	chmod 0644 kdc/keytabs/services.keytab
 	$(PODMAN) run --name $(IC_PREFIX)postgresql --rm --add-host=mymachine:$(MY_IP) --publish '15432:5432' --detach --interactive --tty --volume $(PWD)/kdc/keytabs:/tmp/keytabs $(IC_PREFIX)postgresql
+	if [ ! -e wildfly-backend/wildfly-23.0.2.Final.tar.gz ]; then curl -JLk https://download.jboss.org/wildfly/23.0.2.Final/wildfly-23.0.2.Final.tar.gz > wildfly-backend/wildfly-23.0.2.Final.tar.gz ; fi
 	$(BUILDAH) build --add-host=mymachine:$(MY_IP) -t $(IC_PREFIX)wildfly-backend wildfly-backend
 	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE USER "ludwig@EXAMPLE.COM" WITH NOCREATEDB NOCREATEROLE NOSUPERUSER'
 	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE USER "wolfgang@EXAMPLE.COM" WITH NOCREATEDB NOCREATEROLE NOSUPERUSER'
-	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE DATABASE DB1 WITH OWNER "ludwig@EXAMPLE.COM'
-	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE DATABASE DB2 WITH OWNER "wolfgang@EXAMPLE.COM'
-	$(PODMAN) run --name $(IC_PREFIX)wildfly-backend --rm --add-host=mymachine:$(MY_IP) --publish '15432:5432' --detach --interactive --tty --volume $(PWD)/kdc/keytabs:/tmp/keytabs $(IC_PREFIX)wildfly-backend
+	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE DATABASE DB1 WITH OWNER "ludwig@EXAMPLE.COM"'
+	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE DATABASE DB2 WITH OWNER "wolfgang@EXAMPLE.COM"'
+	$(PODMAN) run --name $(IC_PREFIX)wildfly-backend --rm --add-host=mymachine:$(MY_IP) --publish '18443:8443' --detach --interactive --tty --volume $(PWD)/kdc/keytabs:/tmp/keytabs $(IC_PREFIX)wildfly-backend
 
 certificates:
 	echo -n > tls/artifacts/index.txt
@@ -54,11 +55,18 @@ clean:
 	-$(RM) postgresql/*.crt
 	-$(RM) postgresql/*.key
 	-$(RM) postgresql/krb5.conf
-	-$(RM) postgresql/*.keytab
+	-$(RM) wildfly-backend/*.crt
+	-$(RM) wildfly-backend/*.key
+	-$(RM) wildfly-frontend/*.crt
+	-$(RM) wildfly-frontend/*.key
 	-$(PODMAN) rm -f $(IC_PREFIX)openldap
 	-$(BUILDAH) rmi $(IC_PREFIX)openldap
 	-$(PODMAN) rm -f $(IC_PREFIX)kdc
 	-$(BUILDAH) rmi $(IC_PREFIX)kdc
 	-$(PODMAN) rm -f $(IC_PREFIX)postgresql
 	-$(BUILDAH) rmi $(IC_PREFIX)postgresql
+	-$(PODMAN) rm -f $(IC_PREFIX)wildfly-backend
+	-$(BUILDAH) rmi $(IC_PREFIX)wildfly-backend
+	-$(PODMAN) rm -f $(IC_PREFIX)wildfly-frontend
+	-$(BUILDAH) rmi $(IC_PREFIX)wildfly-frontend
 	-$(BUILDAH) rmi $(shell $(BUILDAH) images -f dangling=true -q)
