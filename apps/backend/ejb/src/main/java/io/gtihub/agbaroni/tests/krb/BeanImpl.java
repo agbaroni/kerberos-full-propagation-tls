@@ -34,7 +34,7 @@ public class BeanImpl implements Bean {
     // @PersistenceUnit(unitName = "database")
     // private EntityManagerFactory entityManagerFactory;
 
-    @PersistenceContext(unitName = "database")
+    @PersistenceContext(unitName = "database1")
     private EntityManager entityManager;
 
     // private void getBoh() throws Exception {
