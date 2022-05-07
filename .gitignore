@@ -9,4 +9,6 @@
 tls/artifacts/index.txt*
 tls/artifacts/serial*
 postgresql/krb5.conf
+wildfly-backend/krb5.conf
+wildfly-frontend/krb5.conf
 target
