@@ -12,7 +12,7 @@
 	  <defaultLibBundleDir>lib</defaultLibBundleDir>
 	  <modules>
 	    <webModule>
-	      <artifactId>krb-propagate-frontend-web</artifactId>
+	      <artifactId>kfp-apps-frontend-web</artifactId>
 	      <contextRoot>/test</contextRoot>
 	      <groupId>io.github.agbaroni.tests</groupId>
 	    </webModule>
