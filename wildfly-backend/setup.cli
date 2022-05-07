@@ -30,8 +30,6 @@ module add --name=org.postgresql --absolute-resources=/tmp/postgresql-42.3.5.jar
 
 /subsystem=datasources/data-source=D1DS:add(driver-name=postgresql,jndi-name=java:/D1DS,elytron-enabled=true,connection-url="jdbc:postgresql://mymachine:15432/D1",valid-connection-checker-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker",validate-on-match=true,background-validation=false,exception-sorter-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter")
 
-/subsystem=datasources/data-source=D2DS:add(driver-name=postgresql,jndi-name=java:/D2DS,elytron-enabled=true,connection-url="jdbc:postgresql://mymachine:15432/D2",valid-connection-checker-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker",validate-on-match=true,background-validation=false,exception-sorter-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter")
-
 ########## Remoting ##########
 
 /subsystem=remoting/http-connector=http-remoting-connector:undefine-attribute(name=security-realm)

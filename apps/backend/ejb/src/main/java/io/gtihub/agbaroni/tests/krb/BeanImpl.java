@@ -25,8 +25,8 @@ import org.jboss.ejb3.annotation.SecurityDomain;
 public class BeanImpl implements Bean {
     private static final long serialVersionUID = 283937163837382L;
 
-    @Resource
-    private EJBContext context;
+    //@Resource
+    //private EJBContext context;
 
     // @Resource(lookup = "java:/jdbc/Database")
     // private DataSource dataSource;
@@ -41,10 +41,10 @@ public class BeanImpl implements Bean {
     // 	SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
     // }
 
-    @Override
-    public String getUser() throws Exception {
-	return context.getCallerPrincipal().getName();
-    }
+    //@Override
+    //public String getUser() throws Exception {
+	//return context.getCallerPrincipal().getName();
+    //}
 
     @Override
     public String getWord() throws Exception {

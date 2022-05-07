@@ -8,10 +8,4 @@
       <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
     </properties>
   </persistence-unit>
-  <persistence-unit name="database2">
-    <jta-data-source>java:/D2DS</jta-data-source>
-    <properties>
-      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
-    </properties>
-  </persistence-unit>
 </persistence>
