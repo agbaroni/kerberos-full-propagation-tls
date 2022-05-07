@@ -30,9 +30,9 @@ embed-server --server-config=standalone-full.xml
 
 ########## Remoting ##########
 
-/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=backend-destination:add(host=mymachine,port=28443)
+/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=backend-destination:add(host=mymachine,port=18443)
 
-/subsystem=remoting/remote-outbound-connection=backend-connection:add(outbound-socket-binding-ref=backend-destination)
+/subsystem=remoting/remote-outbound-connection=backend-connection:add(outbound-socket-binding-ref=backend-destination,protocol=https-remoting)
 
 ########## Undertow ##########
 

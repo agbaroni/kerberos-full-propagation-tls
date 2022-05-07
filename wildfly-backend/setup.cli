@@ -41,6 +41,7 @@ module add --name=org.postgresql --absolute-resources=/tmp/postgresql-42.3.5.jar
 /subsystem=remoting/http-connector=http-remoting-connector:undefine-attribute(name=security-realm)
 /subsystem=remoting/http-connector=http-remoting-connector:write-attribute(name=sasl-authentication-factory,value=backend-authentication-factory)
 /subsystem=remoting/http-connector=http-remoting-connector:write-attribute(name=server-name,value=mymachine)
+/subsystem=remoting/http-connector=http-remoting-connector:write-attribute(name=connector-ref,value=https)
 
 ########## EJB ##########
 
