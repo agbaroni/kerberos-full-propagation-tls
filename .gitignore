@@ -4,6 +4,7 @@
 *.pem
 *.keytab
 *.tar.gz
+*.jar
 tls/artifacts/index.txt*
 tls/artifacts/serial*
 postgresql/krb5.conf

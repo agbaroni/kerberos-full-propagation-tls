@@ -16,6 +16,7 @@ all: clean certificates
 	chmod 0644 kdc/keytabs/services.keytab
 	$(PODMAN) run --name $(IC_PREFIX)postgresql --rm --add-host=mymachine:$(MY_IP) --publish '15432:5432' --detach --interactive --tty --volume $(PWD)/kdc/keytabs:/tmp/keytabs $(IC_PREFIX)postgresql
 	if [ ! -e wildfly-backend/wildfly-23.0.2.Final.tar.gz ]; then curl -JLk https://download.jboss.org/wildfly/23.0.2.Final/wildfly-23.0.2.Final.tar.gz > wildfly-backend/wildfly-23.0.2.Final.tar.gz ; fi
+	if [ ! -e wildfly-backend/postgresql-42.3.5.jar ]; then curl -JLk https://jdbc.postgresql.org/download/postgresql-42.3.5.jar > wildfly-backend/postgresql-42.3.5.jar ; fi
 	$(BUILDAH) build --add-host=mymachine:$(MY_IP) -t $(IC_PREFIX)wildfly-backend wildfly-backend
 	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE USER "ludwig@EXAMPLE.COM" WITH NOCREATEDB NOCREATEROLE NOSUPERUSER'
 	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE USER "wolfgang@EXAMPLE.COM" WITH NOCREATEDB NOCREATEROLE NOSUPERUSER'
