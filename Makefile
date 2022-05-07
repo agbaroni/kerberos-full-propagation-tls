@@ -10,7 +10,7 @@ all: clean certificates
 	$(BUILDAH) build -t $(IC_PREFIX)openldap openldap
 	$(PODMAN) run --name $(IC_PREFIX)openldap --rm --publish '10636:636' --detach --interactive --tty $(IC_PREFIX)openldap
 	$(BUILDAH) build --add-host=mymachine:$(MY_IP) -t $(IC_PREFIX)kdc kdc
-	$(PODMAN) run --name $(IC_PREFIX)kdc --rm --add-host=mymachine:$(MY_IP) --publish '10088:88' --publish '10749:749' --publish '10750:750' --detach --interactive --tty --volume $(PWD)/kdc/keytabs:/tmp/keytabs $(IC_PREFIX)kdc
+	$(PODMAN) run --name $(IC_PREFIX)kdc --rm --add-host=mymachine:$(MY_IP) --publish '10088:88' --publish '10088:88/udp' --publish '10749:749' --publish '10750:750' --detach --interactive --tty --volume $(PWD)/kdc/keytabs:/tmp/keytabs $(IC_PREFIX)kdc
 	$(CP) kdc/krb5.conf postgresql/
 	$(BUILDAH) build --add-host=mymachine:$(MY_IP) -t $(IC_PREFIX)postgresql postgresql
 	chmod 0644 kdc/keytabs/services.keytab
