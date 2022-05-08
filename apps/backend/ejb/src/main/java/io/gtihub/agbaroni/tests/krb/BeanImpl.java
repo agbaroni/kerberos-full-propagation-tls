@@ -2,6 +2,7 @@ package io.github.agbaroni.tests.krb;
 
 import java.io.Serializable;
 import java.util.Properties;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
@@ -10,6 +11,7 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceProperty;
 import javax.persistence.PersistenceUnit;
@@ -60,11 +62,13 @@ public class BeanImpl implements Bean {
 
 	System.out.println("@@@ " + entityManager);
 
-	w = entityManager.find(Word.class, new Integer(0));
+	//w = entityManager.find(Word.class, new Integer(0));
+  TypedQuery<Word> query = entityManager.createQuery("SELECT w FROM Word w WHERE w.id = 0", Word.class);
+  List<Word> words = query.getResultList();
 
-	System.out.println("@@@ " + w);
+	System.out.println("@@@ " + words.size());
 
-	word = w.getName();
+	//word = w.getName();
 
 	// entityManager.close();
 

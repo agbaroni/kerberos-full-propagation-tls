@@ -2,6 +2,15 @@ embed-server --server-config=standalone-full.xml
 
 :write-attribute(name=name,value=mymachine)
 
+/subsystem=logging/root-logger=ROOT:write-attribute(name=level,value=ALL)
+/subsystem=logging/console-handler=CONSOLE:write-attribute(name=level,value=ALL)
+/subsystem=logging/logger=org.jboss.as.controller.management-operation:add(level=INFO)
+/subsystem=logging/logger=org.jboss.modules:add(level=INFO)
+/subsystem=logging/logger=org.jboss.as.server.deployment.scanner:add(level=INFO)
+/subsystem=logging/logger=org.apache.activemq:add(level=INFO)
+/subsystem=logging/logger=org.jboss.threads:add(level=INFO)
+/subsystem=logging/logger=org.jboss.vfs:add(level=INFO)
+
 ########## Elytron ##########
 
 /subsystem=elytron/key-store=dir-key-store:add(type=JKS,path=/tmp/openldap.jks,credential-reference={clear-text=password})
@@ -34,7 +43,8 @@ module add --name=org.postgresql --absolute-resources=/tmp/postgresql-42.3.5.jar
 
 /subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql,driver-module-name=org.postgresql,driver-xa-datasource-class-name=org.postgresql.xa.PGXADataSource)
 
-/subsystem=datasources/data-source=D1DS:add(driver-name=postgresql,jndi-name=java:/D1DS,elytron-enabled=true,connection-url="jdbc:postgresql://mymachine:15432/D1",valid-connection-checker-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker",validate-on-match=true,background-validation=false,exception-sorter-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter")
+# authentication-context=backend-context is mandatory because global authentication-context is not working
+/subsystem=datasources/data-source=D1DS:add(driver-name=postgresql,jndi-name=java:/D1DS,elytron-enabled=true,authentication-context=backend-context,connection-url="jdbc:postgresql://mymachine:15432/D1",valid-connection-checker-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker",validate-on-match=true,background-validation=false,exception-sorter-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter")
 
 ########## Remoting ##########
 

@@ -28,6 +28,8 @@ all: clean certificates
 	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE USER "wolfgang@EXAMPLE.COM" WITH NOCREATEDB NOCREATEROLE NOSUPERUSER'
 	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE DATABASE DB1 WITH OWNER "ludwig@EXAMPLE.COM"'
 	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql -c 'CREATE DATABASE DB2 WITH OWNER "wolfgang@EXAMPLE.COM"'
+	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql db1 -c 'CREATE TABLE WORDS (ID INTEGER PRIMARY KEY, NAME VARCHAR(32))'
+	$(PODMAN) exec -it $(IC_PREFIX)postgresql /usr/bin/psql db1 -c "INSERT INTO WORDS VALUES (0, 'hello')"
 	$(PODMAN) run --name $(IC_PREFIX)wildfly-backend --rm --add-host=mymachine:$(MY_IP) --publish '18443:8443' --detach --interactive --tty --volume $(PWD)/kdc/keytabs:/tmp/keytabs $(IC_PREFIX)wildfly-backend
 	$(CP) wildfly-backend/wildfly-23.0.2.Final.tar.gz wildfly-frontend/
 	$(CP) kdc/krb5.conf wildfly-frontend/
