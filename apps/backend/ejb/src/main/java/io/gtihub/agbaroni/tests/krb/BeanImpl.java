@@ -30,18 +30,8 @@ public class BeanImpl implements Bean {
     @Resource
     private EJBContext context;
 
-    // @Resource(lookup = "java:/jdbc/Database")
-    // private DataSource dataSource;
-
-    // @PersistenceUnit(unitName = "database")
-    // private EntityManagerFactory entityManagerFactory;
-
     @PersistenceContext(unitName = "database1")
     private EntityManager entityManager;
-
-    // private void getBoh() throws Exception {
-    // 	SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
-    // }
 
     @Override
     public String getUser() throws Exception {
@@ -50,29 +40,10 @@ public class BeanImpl implements Bean {
 
     @Override
     public String getWord() throws Exception {
-	// Properties properties = new Properties();
-	// EntityManager entityManager;
 	Word w = null;
 	String word = "hola";
 
-	// properties.put("javax.persistence.jdbc.user", context.getCallerPrincipal().getName());
-	// properties.put("hibernate.connection.username", context.getCallerPrincipal().getName());
-
-	// entityManager = entityManagerFactory.createEntityManager(properties);
-
-	System.out.println("@@@ " + entityManager);
-
-	//w = entityManager.find(Word.class, new Integer(0));
-  //TypedQuery<Word> query = entityManager.createQuery("SELECT w FROM Word w WHERE w.id = 0", Word.class);
-  //List<Word> words = query.getResultList();
-
-	//System.out.println("@@@ " + words.size());
-
-  //if (words.size() != 0) {
-	 // word = words.get(0).getName();
-  //}
-
-	// entityManager.close();
+	//System.out.println("@@@ " + entityManager);
 
 	return word;
     }
