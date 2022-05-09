@@ -32,19 +32,23 @@ embed-server --server-config=standalone-full.xml
 
 /subsystem=elytron/sasl-authentication-factory=backend-authentication-factory:add(security-domain=backend-domain,sasl-server-factory=elytron,mechanism-configurations=[{mechanism-name=GSSAPI,credential-security-factory=backend-security-factory}])
 
-/subsystem=elytron/authentication-configuration=backend-configuration:add(security-domain=backend-domain)
+/subsystem=elytron/authentication-configuration=backend-configuration:add(security-domain=backend-domain,kerberos-security-factory=backend-security-factory)
 /subsystem=elytron/authentication-context=backend-context:add(match-rules=[{authentication-configuration=backend-configuration}])
 
 /subsystem=elytron:write-attribute(name=default-authentication-context,value=backend-context)
 
 ########## Datasource ##########
 
+/subsystem=datasources-agroal/driver=postgresql:add(module=org.postgresql)
+/subsystem=datasources-agroal/datasource=D2DS:add(jndi-name="java:/D2DS",connection-factory={driver=postgresql,url="jdbc:postgresql://mymachine:15432/db1?jaasLogin=false",authentication-context=backend-context},connection-pool={max-size=10})
+
+
 module add --name=org.postgresql --absolute-resources=/tmp/postgresql-42.3.5.jar --dependencies=javax.api,javax.transaction.api
 
 /subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql,driver-module-name=org.postgresql,driver-xa-datasource-class-name=org.postgresql.xa.PGXADataSource)
 
 # authentication-context=backend-context is mandatory because global authentication-context is not working
-/subsystem=datasources/data-source=D1DS:add(driver-name=postgresql,jndi-name=java:/D1DS,elytron-enabled=true,authentication-context=backend-context,connection-url="jdbc:postgresql://mymachine:15432/D1",valid-connection-checker-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker",validate-on-match=true,background-validation=false,exception-sorter-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter")
+/subsystem=datasources/data-source=D1DS:add(driver-name=postgresql,jndi-name=java:/D1DS,elytron-enabled=true,authentication-context=backend-context,connection-url="jdbc:postgresql://mymachine:15432/D1",valid-connection-checker-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker",validate-on-match=true,background-validation=false,exception-sorter-class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter",pool-use-strict-min=true,allow-multiple-users=true)
 
 ########## Remoting ##########
 

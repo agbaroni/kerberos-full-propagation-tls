@@ -1,5 +1,9 @@
 FROM alpine
 
+RUN apk add chrony tzdata
+
+ENV TZ=Europe/Rome
+
 COPY setup.sh /tmp/
 
 RUN apk add bash krb5 krb5-server krb5-server-ldap python3 py3-pip \

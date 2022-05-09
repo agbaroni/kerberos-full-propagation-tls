@@ -1,5 +1,9 @@
 FROM alpine
 
+RUN apk add chrony tzdata
+
+ENV TZ=Europe/Rome
+
 COPY krb5.conf /etc/
 COPY wildfly-23.0.2.Final.tar.gz /tmp/
 COPY kfp-apps-frontend-application-0.1.0-SNAPSHOT.ear /tmp/

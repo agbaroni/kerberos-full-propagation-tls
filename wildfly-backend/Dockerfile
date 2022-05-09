@@ -1,5 +1,9 @@
 FROM alpine
 
+RUN apk add chrony tzdata
+
+ENV TZ=Europe/Rome
+
 COPY krb5.conf /etc/
 COPY postgresql-42.3.5.jar /tmp/
 COPY wildfly-23.0.2.Final.tar.gz /tmp/
@@ -17,7 +21,7 @@ RUN apk add bash curl openjdk11-jre-headless openssl3 \
  && keytool -importkeystore -srckeystore /tmp/openldap.p12 -srcstoretype PKCS12 -destkeystore /tmp/openldap.jks -deststoretype JKS -srcstorepass password -deststorepass password \
  && /bin/bash /opt/wildfly-23.0.2.Final/bin/jboss-cli.sh --file=/opt/setup.cli \
  && adduser -D jboss \
- && chown -R jboss:jboss /opt/wildfly-23.0.2.Final
+ && chown -R jboss:jboss /opt/wildfly-23.0.2.Final \
 
 EXPOSE 8443
 

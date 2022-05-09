@@ -1,5 +1,9 @@
 FROM alpine
 
+RUN apk add chrony tzdata
+
+ENV TZ=Europe/Rome
+
 COPY init_com.ldif /tmp/
 COPY server.ldif /tmp/
 

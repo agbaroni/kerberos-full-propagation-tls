@@ -68,7 +68,9 @@ public class BeanImpl implements Bean {
 
 	System.out.println("@@@ " + words.size());
 
-	//word = w.getName();
+  if (words.size() != 0) {
+	  word = words.get(0).getName();
+  }
 
 	// entityManager.close();
 
