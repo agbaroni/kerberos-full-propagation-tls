@@ -53,7 +53,7 @@ public class BeanImpl implements Bean {
 	// Properties properties = new Properties();
 	// EntityManager entityManager;
 	Word w = null;
-	String word = null;
+	String word = "hola";
 
 	// properties.put("javax.persistence.jdbc.user", context.getCallerPrincipal().getName());
 	// properties.put("hibernate.connection.username", context.getCallerPrincipal().getName());
@@ -63,14 +63,14 @@ public class BeanImpl implements Bean {
 	System.out.println("@@@ " + entityManager);
 
 	//w = entityManager.find(Word.class, new Integer(0));
-  TypedQuery<Word> query = entityManager.createQuery("SELECT w FROM Word w WHERE w.id = 0", Word.class);
-  List<Word> words = query.getResultList();
+  //TypedQuery<Word> query = entityManager.createQuery("SELECT w FROM Word w WHERE w.id = 0", Word.class);
+  //List<Word> words = query.getResultList();
 
-	System.out.println("@@@ " + words.size());
+	//System.out.println("@@@ " + words.size());
 
-  if (words.size() != 0) {
-	  word = words.get(0).getName();
-  }
+  //if (words.size() != 0) {
+	 // word = words.get(0).getName();
+  //}
 
 	// entityManager.close();
 
